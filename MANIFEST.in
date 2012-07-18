@@ -1,0 +1,3 @@
+recursive-include lfs_gallery/templates *
+include README.md
+include requirements.txt
