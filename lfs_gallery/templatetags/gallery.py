@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.template import Library
 from django.template.context import RequestContext
-from pwgallery.models import Gallery, GalleryItem
+from lfs_gallery.models import Gallery, GalleryItem
 
 register = Library()
 

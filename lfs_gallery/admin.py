@@ -1,6 +1,7 @@
 
 from django.contrib import admin
-from pwgallery.models import Gallery, GalleryItem
+
+from lfs_gallery.models import Gallery, GalleryItem
 
 
 admin.site.register(Gallery)

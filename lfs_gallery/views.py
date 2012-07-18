@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # lfs imports
 from lfs.core.utils import set_message_cookie
-from pwgallery.models import Gallery, GalleryItem
+from lfs_gallery.models import Gallery, GalleryItem
 
 
 class GalleryForm(ModelForm):
