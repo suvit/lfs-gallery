@@ -1,0 +1,66 @@
+{% extends "manage/manage_base.html" %}
+{% load i18n %}
+
+{% block left_slot %}
+    <div class="navigation-left-title">
+        Галереи
+    </div>
+    <div class="navigation-left action-groups">
+        {% for gallery in galleries %}
+            <div class="action-group">{{ gallery.title }}</div>
+            {% if gallery.all_items.exists %}
+                {% for item in gallery.all_items %}
+                    <div class="action">
+                        <a href="{% url manage_gallery_item item.id %}"
+                           class="selectable {% ifequal item.id current_id %}selected{% endifequal %}
+                                 {% if not item.active %} notactive{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="site-actions">
+
+        <span class="label">{{ item.gallery.title }}</span>
+
+    	<a class="add"
+           href="{% url add_gallery %}">Добавить галерею</a>
+
+        <a class="delete confirmation-link"
+           data="{% trans 'Delete?' %}"
+           href="{% url del_gallery item.gallery.id %}">Удалить галерею</a>
+
+        <span class="label">{{ item.title }}</span>
+
+        <a class="add"
+           href="{% url add_gallery_item %}">Добавить пункт галереи</a>
+
+        <a class="delete confirmation-link"
+           data="{% trans 'Delete?' %}"
+           href="{% url del_gallery_item item.id %}">Удалить пункт галереи</a>
+    </div>
+
+    <div id="manage-tabs">
+
+        <ul>
+            <li class="ui-tabs-nav-item"><a href="#data">Пункт галереи</a></li>
+        </ul>
+
+        <div id="data">
+            <h2>Пункт галереи</h2>
+            <form action="{% url manage_gallery_item item.id %}"
+                  method="post"
+                  enctype="multipart/form-data">
+                {{form.as_p}}
+                <input type="submit"
+                       value="{% trans 'Save' %}">
+            </form>
+        </div>
+    </div>
+{% endblock %}

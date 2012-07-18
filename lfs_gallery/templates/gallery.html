@@ -1,0 +1,16 @@
+{% load media %}
+{% load thumbnail %}
+{% if items.exists %}
+
+<ul class="gallery">
+    {% for item in items %}
+    <li>
+      <a href="{{item.link}}">
+        <img src="{% thumbnail item.image.rel_path '1020x376' %}"
+             width="1020" height="376"
+             alt="{{item.title}}"/>
+      </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}

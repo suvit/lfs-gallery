@@ -1,0 +1,54 @@
+{% extends "manage/manage_base.html" %}
+{% load i18n %}
+
+
+{% block left_slot %}
+    <div class="navigation-left-title">
+        Галереи
+    </div>
+    <div class="navigation-left action-groups">
+        {% for gallery in galleries %}
+            <div class="action-group">{{ gallery.title }}</div>
+            {% if gallery.all_items.exists %}
+                {% for item in gallery.all_items %}
+                    <div class="action">
+                        <a href="{% url manage_gallery_item item.id %}"
+                           class="selectable {% ifequal item.id current_id %}selected{% endifequal %}
+                                 {% if not item.active %} notactive{% endif %}">
+                            {{ item.title }}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div id="manage-tabs">
+        <ul>
+            <li class="ui-tabs-nav-item"><a href="#data">Добавить галерею</a></li>
+        </ul>
+
+        <div id="data">
+            <h2>Добавить галерею</h2>
+            <form action="{% url add_gallery %}"
+                  method="post"
+                  enctype="multipart/form-data">
+                {{form.as_p}}
+                <input type="submit"
+                       value="{% trans 'Add' %}" />
+                    {% if request.META.HTTP_REFERER %}
+                        <input type="button"
+                               onclick="window.location='{{request.META.HTTP_REFERER}}'"
+                               value="{% trans 'Cancel' %}" />
+                    {% else %}
+                        <input type="button"
+                               onclick="window.location='{% url lfs_manage_actions %}'"
+                               value="{% trans 'Cancel' %}" />
+
+                    {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
