@@ -33,7 +33,7 @@
             <h2>Добавить пункт галереи</h2>
             <form action="{% url add_gallery_item %}"
                   method="post"
-                  enctype="multipart/form-data">
+                  enctype="multipart/form-data">{% csrf_token %}
                 {{form.as_p}}
                 <input type="submit"
                        value="{% trans 'Add' %}" />

@@ -23,6 +23,16 @@ class GalleryItemForm(ModelForm):
     class Meta:
         model = GalleryItem
 
+@permission_required("core.manage_shop")
+def manage_galleries(request):
+
+    try:
+        item = GalleryItem.objects.all()[0]
+        url = reverse("manage_gallery_item", kwargs={"id": item.id})
+    except IndexError:
+        url = reverse("add_gallery")
+
+    return HttpResponseRedirect(url)
 
 @permission_required("core.manage_shop")
 def manage_gallery_items(request):
@@ -41,13 +51,16 @@ def manage_gallery_item(request, id, template_name="manage/gallery_item.html"):
 
     item = get_object_or_404(GalleryItem, pk=id)
     if request.method == "POST":
-        form = GalleryItemForm(instance=item, data=request.POST, files=request.FILES)
+        form = GalleryItemForm(instance=item,
+                               data=request.POST,
+                               files=request.FILES)
         if form.is_valid():
             new_action = form.save()
             _update_positions()
 
             return set_message_cookie(
-                url = reverse("manage_gallery_item", kwargs={"id" : item.id}),
+                url = reverse("manage_gallery_item",
+                              kwargs={"id" : item.id}),
                 msg = u"Пункт галереи сохранен",
             )
     else:
