@@ -4,16 +4,15 @@
 # See the NOTICE for more information.
 
 import os
-from setuptools import setup, find_packages
 import sys
+from setuptools import setup, find_packages
 
-
-version = '0.1.3'
+from lfs_gallery import VERSION
 
 
 setup(
     name='lfs_gallery',
-    version=version,
+    version=VERSION,
 
     description='Image Gallery for LFS',
     long_description=file(
