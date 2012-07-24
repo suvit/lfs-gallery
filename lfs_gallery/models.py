@@ -28,13 +28,13 @@ class Gallery(models.Model):
 class GalleryItem(models.Model):
 
     gallery = models.ForeignKey(Gallery, verbose_name=u"Галерея")
-    
+
     title = models.CharField(verbose_name=u"Название", max_length=100)
-    
+
     link = models.CharField(verbose_name=u"Ссылка", blank=True, max_length=100)
-    
+
     active = models.BooleanField(verbose_name=u"Активно", default=False)
-    
+
     position = models.IntegerField(verbose_name=u"Позиция", default=999)
 
     image = models.ImageField(verbose_name=u"Картинка",
