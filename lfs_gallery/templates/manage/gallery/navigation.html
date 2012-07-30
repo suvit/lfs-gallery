@@ -1,0 +1,25 @@
+<div class="navigation-left-title">
+  <a href="{% url manage_galleries %}">Галереи</a>
+</div>
+<style>
+.notactive {
+  font-style: italic;
+}
+</style>
+<div class="navigation-left action-groups">
+  {% for gallery in galleries %}
+    <div class="action-group">
+      <a href="{% url manage_gallery gallery.id %}">{{ gallery.title }}</a></div>
+    {% if gallery.all_items.exists %}
+        {% for item in gallery.all_items %}
+            <div class="action">
+                <a href="{% url manage_gallery_item item.id %}"
+                   class="selectable {% ifequal item.id current_id %}selected{% endifequal %}
+                         {% if not item.active %} notactive{% endif %}">
+                    {{ item.title }}
+                </a>
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endfor %}
+</div>

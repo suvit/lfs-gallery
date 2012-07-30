@@ -1,54 +1,55 @@
-{% extends "manage/manage_base.html" %}
+{% extends "manage/gallery/base.html" %}
 {% load i18n %}
 
+{% block actions %}
 
-{% block left_slot %}
-    <div class="navigation-left-title">
-        Галереи
-    </div>
-    <div class="navigation-left action-groups">
-        {% for gallery in galleries %}
-            <div class="action-group">{{ gallery.title }}</div>
-            {% if gallery.all_items.exists %}
-                {% for item in gallery.all_items %}
-                    <div class="action">
-                        <a href="{% url manage_gallery_item item.id %}"
-                           class="selectable {% ifequal item.id current_id %}selected{% endifequal %}
-                                 {% if not item.active %} notactive{% endif %}">
-                            {{ item.title }}
-                        </a>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </div>
+  {% if gallery %}
+  <span class="label">{% trans 'Gallery' %}: {{ gallery.title }}</span>
+  {% endif %}
+
+  <a class="add"
+     href="{% url add_gallery %}">{% trans 'Add gallery' %}</a>
+
+  {% if gallery %}
+  <a class="delete confirmation-link"
+     data="{% trans 'Delete' %}?"
+     href="{% url del_gallery gallery.id %}">{% trans 'Delete gallery' %}</a>
+  {% endif %}
+  <br/>
+  <a class="add"
+     href="{% url add_gallery_item %}">{% trans 'Add gallery item' %}</a>
+
 {% endblock %}
 
-{% block content %}
-    <div id="manage-tabs">
-        <ul>
-            <li class="ui-tabs-nav-item"><a href="#data">Добавить галерею</a></li>
-        </ul>
+{% block tabs %}
+  <ul>
+    <li class="ui-tabs-nav-item">
+      <a href="#data">{% if gallery %}{% trans 'Gallery' %}{% else %}{% trans 'Add Gallery' %}{% endif %}</a></li>
+    {% if gallery %}
+    <li class="ui-tabs-nav-item">
+      <a href="#items">{% trans 'Items' %}</a></li>
+    {% endif %}
+  </ul>
 
-        <div id="data">
-            <h2>Добавить галерею</h2>
-            <form action="{% url add_gallery %}"
-                  method="post"
-                  enctype="multipart/form-data">{% csrf_token %}
-                {{form.as_p}}
-                <input type="submit"
-                       value="{% trans 'Add' %}" />
-                    {% if request.META.HTTP_REFERER %}
-                        <input type="button"
-                               onclick="window.location='{{request.META.HTTP_REFERER}}'"
-                               value="{% trans 'Cancel' %}" />
-                    {% else %}
-                        <input type="button"
-                               onclick="window.location='{% url lfs_manage_actions %}'"
-                               value="{% trans 'Cancel' %}" />
-
-                    {% endif %}
-            </form>
-        </div>
-    </div>
+  <div id="data">
+    <h2>{% if gallery %}{% trans 'Gallery' %}: {{gallery.title}}
+        {% else%}{% trans 'Add Gallery' %}{% endif %}</h2>
+    <form action="{% url add_gallery %}"
+          method="post"
+          enctype="multipart/form-data">{% csrf_token %}
+        {{form.as_p}}
+        <input type="submit"
+               value="{% trans 'Add' %}" />
+            {% if request.META.HTTP_REFERER %}
+                <input type="button"
+                       onclick="window.location='{{request.META.HTTP_REFERER}}'"
+                       value="{% trans 'Cancel' %}" />
+            {% else %}
+                <input type="button"
+                       onclick="window.location='{% url manage_galleries %}'"
+                       value="{% trans 'Cancel' %}" />
+            {% endif %}
+    </form>
+  </div>
+  <div id="items"></div>
 {% endblock %}

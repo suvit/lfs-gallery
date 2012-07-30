@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # lfs imports
 from lfs.core.utils import set_message_cookie
+from lfs.core.widgets.image import LFSImageInput
 from lfs_gallery.models import Gallery, GalleryItem
 
 
@@ -22,6 +23,9 @@ class GalleryForm(ModelForm):
 class GalleryItemForm(ModelForm):
     class Meta:
         model = GalleryItem
+        widgets = {'image': LFSImageInput,
+                  }
+
 
 @permission_required("core.manage_shop")
 def manage_galleries(request):
@@ -127,6 +131,30 @@ def add_gallery(request, template_name="manage/add_gallery.html"):
         "form" : form,
         "galleries" : Gallery.objects.all(),
     }))
+
+
+@permission_required("core.manage_shop")
+def manage_gallery(request, id, template_name="manage/add_gallery.html"):
+
+    gallery = get_object_or_404(Gallery, pk=id)
+    form = GalleryForm(instance=gallery,
+                       data=request.POST or None,
+                       files=request.FILES or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            return set_message_cookie(
+                url = reverse("manage_gallery", args=[gallery.id]),
+                msg = u"Галерея изменена",
+            )
+
+    return render_to_response(template_name, RequestContext(request, {
+        "form": form,
+        'gallery': gallery,
+        "galleries" : Gallery.objects.all(),
+    }))
+
 
 
 @permission_required("core.manage_shop")

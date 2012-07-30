@@ -1,0 +1,14 @@
+{% extends "manage/manage_base.html" %}
+
+{% block left_slot %}
+  {% include 'manage/gallery/navigation.html' %}
+{% endblock %}
+
+{% block content %}
+  <div class="site-actions">
+    {% block actions %}{% endblock %}
+  </div>
+  <div id="manage-tabs">
+    {% block tabs %}{% endblock %}
+  </div>
+{% endblock %}
